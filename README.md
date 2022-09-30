@@ -1,7 +1,7 @@
 # Artificial Intelligence and Decision Systems, 2022
 # IASD 2022/23 Project Assignment #1, 'Roll the Ball' Slide Puzzle:
-Luis Custodio and Rodrigo Ventura
-Instituto Superior Tecnico, University of Lisbon
+Luis Custódio and Rodrigo Ventura
+Instituto Superior Técnico, University of Lisbon
 (Version 1.0, September 19, 2022)
 
 # Introduction
