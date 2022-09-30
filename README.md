@@ -78,7 +78,7 @@ three deliverables. This document defines the first assignment and deliverable.
 Notice that puzzles may have a solution or not; a puzzle may have more than one solution,
 and the size of the puzzles vary.
 
-# 3 Firt Assignment
+# 3 First Assignment
 
 The first assignment is to develop a Python program capable of reading a puzzle (through
 an input file whose format will be defined in the next section) and asserting whether the
