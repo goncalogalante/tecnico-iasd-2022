@@ -4,6 +4,10 @@ Luis Custódio and Rodrigo Ventura
 Instituto Superior Técnico, University of Lisbon
 (Version 1.0, September 19, 2022)
 
+<p align="center">
+  <img width="360" height="200" src="images/title.png">
+</p>
+
 # Introduction
 
 Free the Ball, or Roll the Ball, is a classic tile puzzle where the goal is to move the sliding
@@ -19,13 +23,21 @@ the Ball’ puzzles. The project will be divided in three parts/assignments, eac
 deliverable. This first assignment aims at reading a puzzle from an input file and determining
 if in the initial configuration the goal is achieved (i.e. the ball can roll to the exit).
 
+<p align="center">
+  <img width="150" height="150" src="images/fig1.png">
+  <figcaption align = "center"><b>Figure 1: 'Free the Ball' Puzzle</b></figcaption>
+</p>
+
 # 1 Problem Statement and Solution
 The puzzle is represented by a grid of N by N cells where some (most of) the cells are
 occupied by tiles and some (few) are empty. For instance, in Figure 2, there is a 4 by 4
 puzzle, where the black squares represent empty cells (4 of them) and the rest of the cells
 are occupied by different tiles.
 
-(Figure 2: An example of a ‘Free the Ball’ puzzle)
+<p align="center">
+  <img width="180" height="180" src="images/fig2.png">
+  <figcaption align = "center"><b>Figure 2: An example of a 'Free the Ball' Puzzle</b></figcaption>
+</p>
 
 All puzzles should have two special tiles: i) one that establishes where the ball starts,
 and ii) another one that defines where the ball should exit. In Figure 2, the former is the
@@ -41,11 +53,17 @@ always cell (N − 1, N − 1).
 The solution for puzzle in Figure 2 is presented in Figure 4. It involves three moves: (i)
 slide tile (2, 1) to empty cell (1, 1), (ii) slide tile (2, 2) to empty cell (2, 1), and (iii) slide tile
 
-(Figure 3: The numbering of a puzzle)
+<p align="center">
+  <img width="180" height="180" src="images/fig3.png">
+  <figcaption align = "center"><b>Figure 3: The numbering of a puzzle</b></figcaption>
+</p>
 
 (3, 2) to empty cell (2, 2).
 
-(Figure 4: The solution for the puzzle)
+<p align="center">
+  <img width="600" height="130" src="images/fig4.png">
+  <figcaption align = "center"><b>Figure 4: The solution for the puzzle</b></figcaption>
+</p>
 
 # 1.1 Tiles
 
@@ -68,11 +86,20 @@ the sets of possible initial and goal tiles).
 The goal of the project is to develop a program using Python (version 3) to search for a
 solution, if any, for a ‘Roll the Ball’ puzzle. The project will be divided in three parts, and
 
-(Figure 5: The set of movable tiles)
+<p align="center">
+  <img width="425" height="250" src="images/fig5.png">
+  <figcaption align = "center"><b>Figure 5: The set of movable tiles</b></figcaption>
+</p>
 
-(Figure 6: Example with blue (not movable) tiles)
+<p align="center">
+  <img width="200" height="200" src="images/fig6.png">
+  <figcaption align = "center"><b>Figure 6: Example with blue (not movable) tiles</b></figcaption>
+</p>
 
-(Figure 7: Set of possible initial and goal tiles)
+<p align="center">
+  <img width="450" height="200" src="images/fig7.png">
+  <figcaption align = "center"><b>Figure 7: Set of possible initial and goal tiles</b></figcaption>
+</p>
 
 three deliverables. This document defines the first assignment and deliverable.
 Notice that puzzles may have a solution or not; a puzzle may have more than one solution,
@@ -162,6 +189,11 @@ right-top right-left right-left left-down
 goal-right right-left right-left left-top
 
 empty-cell empty-cell empty-cell empty-cell
+
+<p align="center">
+  <img width="200" height="200" src="images/fig8.png">
+  <figcaption align = "center"><b>Figure 8: Another example</b></figcaption>
+</p>
 
 # 5 Deliverable 
 
