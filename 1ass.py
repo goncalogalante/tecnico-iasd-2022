@@ -13,7 +13,7 @@ class RTBProblem (): #class RTBProblem (search.problem):
         while a[0]=='#':
             a=fh.readline()
             pass
-        self.N=int(a[0])
+        self.N=int(a[0:-1])
         #print(self.N)
         for i in range (0,self.N): #tirar as linhas de texto para o mapa (matriz)
             l=fh.readline()
@@ -51,20 +51,41 @@ class RTBProblem (): #class RTBProblem (search.problem):
         answer=True
         
         nextm=(self.map[xi][yi].split('-'))[1]
-        #print(nextm)
         print(xi,yi,self.map[xi][yi])
-        answer=movevalid(nextm,xi,yi,self)
-#         while (movevalid(nextm,xi,yi,prob)!= (-1,-1) or movevalid(nextm,xi,yi,prob)!= (self.end[0],self.end[1])):
-#                 nextm=(self.map[xi][yi].split('-'))[1]
-#             pass
+        while (xi,yi)!=(self.end):
+            (nextm,xi,yi,answer) = movevalid(nextm,xi,yi,self) #check move
+            #print(xi,yi)
+            if(answer==True):  #check cell
+                #print(xi,yi,self.map[xi][yi])
+                
+
+                if(xi,yi)==self.end:
+                    if((self.map[xi][yi].split('-'))[1] == nextm):
+                        return True
+                    else:
+                        return False
+                    
+                if((self.map[xi][yi].split('-'))[0] == nextm):
+                    nextm=(self.map[xi][yi].split('-'))[1]
+                    pass
+                elif((self.map[xi][yi].split('-'))[1] == nextm):
+                    nextm=(self.map[xi][yi].split('-'))[0]
+                    pass
+                else:
+                    print("bad move",xi,yi,self.map[xi][yi])
+                    return False
+                pass
+            else:
+                return False
+            pass
         return answer
 
 def movevalid(move,xi,yi,prob):
     if(move=="left"):
         if (yi-1)<0: #inválido
-            xf=-1
-            yf=-1
-            return False
+            xf=xi
+            yf=yi
+            return (move,xf,yf,False)
         else:
             xf=xi
             yf=yi-1
@@ -75,46 +96,46 @@ def movevalid(move,xi,yi,prob):
             yf=yi+1
             move="left"
         else:
-            xf=-1
-            yf=-1
-            return False
+            xf=xi
+            yf=yi
+            return (move,xf,yf,False)
     elif(move=="down"):
         if (xi+1)<prob.N: #válido
             xf=xi+1
             yf=yi
             move="top"
         else:
-            xf=-1
-            yf=-1
-            return False
+            xf=xi
+            yf=yi
+            return (move,xf,yf,False)
     elif(move=="top"):
         if (xi-1)<0: #inválido
-            xf=-1
-            yf=-1
-            return False
+            xf=xi
+            yf=yi
+            return (move,xf,yf,False)
         else:
             xf=xi-1
             yf=yi
             move="down"
 
-    return checkcell(move,xf,yf,prob)
+    return (move,xf,yf,True)
 
-def checkcell(move,xf,yf,prob):
-    print(xf,yf,prob.map[xf][yf])
-    
-    if(xf,yf)==prob.end:
-        return True
-    
-    if((prob.map[xf][yf].split('-'))[0] == move):
-        return movevalid((prob.map[xf][yf].split('-'))[1],xf,yf,prob)
-    elif((prob.map[xf][yf].split('-'))[1] == move):
-        return movevalid((prob.map[xf][yf].split('-'))[0],xf,yf,prob)
-    else:
-        print("bad move")
-        return False
+# def checkcell(move,xf,yf,prob):
+#     print(xf,yf,prob.map[xf][yf])
+#     
+#     if(xf,yf)==prob.end:
+#         return True
+#     
+#     if((prob.map[xf][yf].split('-'))[0] == move):
+#         return movevalid((prob.map[xf][yf].split('-'))[1],xf,yf,prob)
+#     elif((prob.map[xf][yf].split('-'))[1] == move):
+#         return movevalid((prob.map[xf][yf].split('-'))[0],xf,yf,prob)
+#     else:
+#         print("bad move")
+#         return False
 
 def main():
-    fh=open("Fig8-T.txt")
+    fh=open("Arquivo/pub08.dat")
     prob=RTBProblem()
     prob=RTBProblem.load(prob,fh)
 #     print(prob.map)
@@ -125,6 +146,7 @@ def main():
 #     print((prob.map)[prob.end[0]][prob.end[1]])
     
     result=RTBProblem.isSolution(prob)
+    print("deu certo? ->",result)
     
 
 if __name__ == "__main__":
