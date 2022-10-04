@@ -8,8 +8,8 @@ class RTBProblem ():
         self.N=0
         self.beg=(-1,-1)
         self.end=(-1,-1)
-    def load (self,fh):
         
+    def load (self,fh):
         ## Reads the comment lines and stores the size of the puzzle
         a=fh.readline()
         while a[0]=='#':
