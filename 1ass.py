@@ -1,7 +1,10 @@
 #import search
 import numpy as np
 
-## Class RTBPRoblem (Search.problem)
+## This class provides three functions to solve the RTBProblem
+# 1. init: method to instantiate the class
+# 2. load: loads the puzzle from a file object fh
+# 3. isSolution: returns 1 if the loaded puzzle is a solution, 0 otherwise
 class RTBProblem (): 
     def __init__ (self): 
         self.map=[]
@@ -95,7 +98,7 @@ class RTBProblem ():
         ## Returns True if the puzzle is already a solution
         return answer
 
-## Checks if a move its valid or invalid according to its coordinates and return it.
+## This function checks if a move its valid or invalid according to its coordinates and return it.
 def movevalid(move,xi,yi,prob):
     if(move=="left"):
         if (yi-1)<0: # Invalid
@@ -136,6 +139,7 @@ def movevalid(move,xi,yi,prob):
 
     return (move,xf,yf,True)
 
+## This function defines the main function
 def main():
     fh=open("Arquivos/pub05.dat")
     prob=RTBProblem()
@@ -143,6 +147,6 @@ def main():
     result=RTBProblem.isSolution(prob)
     print("deu certo? ->",result)
     
-# Executes the main function
+## Executes the main function
 if __name__ == "__main__":
     main()
