@@ -13,14 +13,14 @@ class RTBProblem ():
         self.end=(-1,-1)
         
     def load (self,fh):
-        ## Reads the comment lines and stores the size of the puzzle
+        ## Ignores the comment lines and stores the size of the puzzle
         a=fh.readline()
         while a[0]=='#':
             a=fh.readline()
             pass
         self.N=int(a[0:-1])
      
-        ## For each line of text saves it to the map matrix and make some verifications 
+        ## For each line of text saves it to the map matrix and makes some verifications 
         for i in range (0,self.N):
             l=fh.readline()
             (self.map).append(l.split(' '))
@@ -30,7 +30,7 @@ class RTBProblem ():
                 (self.map)[i][-1]= ((self.map)[i][-1])[0:-1]
                 pass
             
-            ## Checks if the initial state exists and stores its coordinates 
+            ## Checks if the initial state already exists and stores its coordinates 
             if (self.beg == (-1,-1)): 
                 j=0
                 while (j<self.N and ((self.map)[i][j])[0]!='i'):
@@ -41,7 +41,7 @@ class RTBProblem ():
                     pass
                 pass
             
-            ## Checks if the goal state exists and stores its coordinates
+            ## Checks if the goal state already exists and stores its coordinates
             if (self.end == (-1,-1)):
                 j=0
                 while (j<self.N and ((self.map)[i][j])[0]!='g'):
@@ -71,14 +71,14 @@ class RTBProblem ():
             (nextm,xi,yi,answer) = movevalid(nextm,xi,yi,self)
             if(answer==True): 
                 
-                ## Returns True if the cell is the goal state
+                ## Evaluates if the cell is the goal state
                 if(xi,yi)==self.end:
                     if((self.map[xi][yi].split('-'))[1] == nextm):
                         return True
                     else:
                         return False
                 
-                ## Evaluates if the cell is not the goal state or an empty one    
+                ## Evaluates if the next cell is valid    
                 if((self.map[xi][yi].split('-'))[0] == nextm):
                     nextm=(self.map[xi][yi].split('-'))[1]
                     pass
