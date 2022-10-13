@@ -3,29 +3,32 @@ import numpy as np
 
 class RTBProblem ():
     def __init__ (self):
-        self.map=[]
+        self.initial=[]
         self.N=0
         self.beg=(-1,-1)
         self.end=(-1,-1)
+        #self.ecell=0 alterar load
         self.algorithm=None
         pass
 
     def result (self,state,action):
+#         cell,move -> switch
         pass
     
     def actions(self,state):
-        move
-        go
-        pass
+#         for find empty cell
+#             check moves
+#             append moves
+#         return lista moves
     
-    def goal__test(self,state): #alterar para começar no state
+    def goal__test(self,state): 
         xi=self.beg[0]
         yi=self.beg[1]
         answer=True
         
         ## Defines the next move from the initial state coordinates
-        nextm=(self.map[xi][yi].split('-'))[1]
-        print(xi,yi,self.map[xi][yi])
+        nextm=(state[xi][yi].split('-'))[1]
+        print(xi,yi,state[xi][yi])
         
         ## Loop that evaluates the cells from the initial state to the goal state
         ## and feedbacks it according to its coordinates
@@ -37,22 +40,22 @@ class RTBProblem ():
                 
                 ## Evaluates if the cell is the goal state
                 if(xi,yi)==self.end:
-                    if((self.map[xi][yi].split('-'))[1] == nextm):
+                    if((state[xi][yi].split('-'))[1] == nextm):
                         return True
                     else:
                         return False
                 
                 ## Evaluates if the next cell is valid    
-                if((self.map[xi][yi].split('-'))[0] == nextm):
-                    nextm=(self.map[xi][yi].split('-'))[1]
+                if((state[xi][yi].split('-'))[0] == nextm):
+                    nextm=(state[xi][yi].split('-'))[1]
                     pass
-                elif((self.map[xi][yi].split('-'))[1] == nextm):
-                    nextm=(self.map[xi][yi].split('-'))[0]
+                elif((state[xi][yi].split('-'))[1] == nextm):
+                    nextm=(state[xi][yi].split('-'))[0]
                     pass
                 
                 ## Returns False if it is none of the above
                 else:
-                    print("bad move",xi,yi,self.map[xi][yi])
+                    print("bad move",xi,yi,state[xi][yi])
                     return False
                 pass
             else:
@@ -115,17 +118,17 @@ def movevalid(move,xi,yi,prob):
         ## For each line of text saves it to the map matrix and makes some verifications 
         for i in range (0,self.N):
             l=fh.readline()
-            (self.map).append(l.split(' '))
+            (self.initial).append(l.split(' '))
             
             ## Removes the character \n of the line
-            if ((self.map)[i][-1])[-1] =='\n': 
-                (self.map)[i][-1]= ((self.map)[i][-1])[0:-1]
+            if ((self.initial)[i][-1])[-1] =='\n': 
+                (self.initial)[i][-1]= ((self.initial)[i][-1])[0:-1]
                 pass
             
             ## Checks if the initial state already exists and stores its coordinates 
             if (self.beg == (-1,-1)): 
                 j=0
-                while (j<self.N and ((self.map)[i][j])[0]!='i'):
+                while (j<self.N and ((self.initial)[i][j])[0]!='i'):
                     j+=1
                     pass
                 if j<self.N:
@@ -136,7 +139,7 @@ def movevalid(move,xi,yi,prob):
             ## Checks if the goal state already exists and stores its coordinates
             if (self.end == (-1,-1)):
                 j=0
-                while (j<self.N and ((self.map)[i][j])[0]!='g'):
+                while (j<self.N and ((self.initial)[i][j])[0]!='g'):
                     j+=1
                     pass
                 if j<self.N:
