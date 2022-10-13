@@ -7,7 +7,7 @@ class RTBProblem ():
         self.N=0
         self.beg=(-1,-1)
         self.end=(-1,-1)
-        #self.ecell=0 alterar load
+        self.ecell=0 
         self.algorithm=None
         pass
 
@@ -125,25 +125,16 @@ def movevalid(move,xi,yi,prob):
                 (self.initial)[i][-1]= ((self.initial)[i][-1])[0:-1]
                 pass
             
-            ## Checks if the initial state already exists and stores its coordinates 
-            if (self.beg == (-1,-1)): 
-                j=0
-                while (j<self.N and ((self.initial)[i][j])[0]!='i'):
-                    j+=1
-                    pass
-                if j<self.N:
+
+            for j in range(0,self.N):
+                if(((self.initial)[i][j])[0]=='i'):
                     self.beg=(i,j)
                     pass
-                pass
-            
-            ## Checks if the goal state already exists and stores its coordinates
-            if (self.end == (-1,-1)):
-                j=0
-                while (j<self.N and ((self.initial)[i][j])[0]!='g'):
-                    j+=1
-                    pass
-                if j<self.N:
+                if(((self.initial)[i][j])[0]=='g'):
                     self.end=(i,j)
+                    pass
+                if(((self.initial)[i][j])[0]=='e'):
+                    self.ecell+=1
                     pass
                 pass
             pass
