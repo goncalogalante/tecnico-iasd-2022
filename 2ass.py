@@ -11,16 +11,83 @@ class RTBProblem ():
         self.algorithm=None
         pass
 
-    def result (self,state,action):
+    def result (self,state,action): #action->((xi,yi),(xf,yf))
 #         cell,move -> switch
+        state[action[0][0]][action[0][1]]=state[action[1][0]][action[1][1]]
+        state[action[1][0]][action[1][1]]="empty-cell"
         pass
     
     def actions(self,state):
+        actions=[]
+        found=[]
+        n=0
 #         for find empty cell
+        for i in range(0,self.N):
+            for j in range(0,self.N):
+                if ((state[i][j])[0]=='e'):
+                    found.append((i,j))
+                    n+=1
+                    pass
+                if(n==self.ecell):
+                    break
+                pass
+            if(n==self.ecell):
+                break
+            pass
+                    
 #             check moves
 #             append moves
+        n=0
+        for n in range (0,prob.ecell): #isto pode ir para lá para cima
+            actions.append(checkmoves(found[n],state,self.N))
+            pass       
+
 #         return lista moves
+        return actions
     
+def checkmoves(ecell,board,N):
+    ecell[0]=x
+    ecell[1]=y
+    moves=[left,right,down,up]
+    actions=[] 
+     
+    if (y-1)<0: # Invalid left
+        moves.remove(left)
+        
+    elif (y+1)>=N: # Invalid right
+        moves.remove(right)
+
+    elif (x+1)>=N: # Invalid down
+        moves.remove(down)
+        
+    elif (x-1)<0: # Invalid up
+        moves.remove(up)
+    
+    for move in enumerate(moves):
+        if (move=="left"): 
+            if((board[x][y-1].split('-'))[-1]=='not' or (board[x][y-1])[0]=='g' or (board[x][y-1])[0]=='e' or (board[x][y-1])[0]=='i'): 
+                moves.remove(move)
+            else
+                actions.append((x,y),(x,y-1))
+        elif (move=="right"): 
+            if((board[x][y+1].split('-'))[-1]=='not' or (board[x][y+1])[0]=='g' or (board[x][y+1])[0]=='e' or (board[x][y+1])[0]=='i'): 
+                moves.remove(move)
+            else
+                actions.append((x,y),move)
+        elif (move=="down"): 
+            if((board[x+1][y].split('-'))[-1]=='not' or (board[x+1][y])[0]=='g' or (board[x+1][y])[0]=='e' or (board[x+1][y])[0]=='i'): 
+                moves.remove(move)
+            else
+                actions.append((x,y),move)
+        elif (move=="up"): 
+            if((board[x-1][y].split('-'))[-1]=='not' or (board[x-1][y])[0]=='g' or (board[x-1][y])[0]=='e' or (board[x-1][y])[0]=='i'): 
+                moves.remove(move)
+            else
+                actions.append((x,y),move)
+        pass
+    
+    return actions
+
     def goal__test(self,state): 
         xi=self.beg[0]
         yi=self.beg[1]
@@ -35,7 +102,7 @@ class RTBProblem ():
         while (xi,yi)!=(self.end):
             
             ## Checks if the move is valid
-            (nextm,xi,yi,answer) = movevalid(nextm,xi,yi,self)
+            (nextm,xi,yi,answer) = movevalid(nextm,xi,yi,self.N)
             if(answer==True): 
                 
                 ## Evaluates if the cell is the goal state
@@ -66,7 +133,7 @@ class RTBProblem ():
             return answer
         pass
 ## This function checks if a move its valid or invalid according to its coordinates and return it.
-def movevalid(move,xi,yi,prob):
+def movevalid(move,xi,yi,N):
     if(move=="left"):
         if (yi-1)<0: # Invalid
             xf=xi
@@ -77,7 +144,7 @@ def movevalid(move,xi,yi,prob):
             yf=yi-1
             move="right"
     elif(move=="right"):
-        if (yi+1)<prob.N: # Valid
+        if (yi+1)<N: # Valid
             xf=xi
             yf=yi+1
             move="left"
@@ -86,7 +153,7 @@ def movevalid(move,xi,yi,prob):
             yf=yi
             return (move,xf,yf,False)
     elif(move=="down"):
-        if (xi+1)<prob.N: # Valid
+        if (xi+1)<N: # Valid
             xf=xi+1
             yf=yi
             move="top"
