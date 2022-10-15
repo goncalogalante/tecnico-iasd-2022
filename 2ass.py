@@ -42,8 +42,8 @@ class RTBProblem (search.Problem):
                 break
             pass
                     
-#             check moves
-#             append moves
+#             check moves#             append moves
+
         n=0
         for n in range (0,self.ecell): #isto pode ir para lá para cima
             actions.extend(checkmoves(found[n],state,self.N))
