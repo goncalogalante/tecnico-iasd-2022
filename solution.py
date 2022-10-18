@@ -26,28 +26,29 @@ class RTBProblem (search.Problem):
     
     def actions(self,state):
         actions=[]
-        found=[]
+        #found=[]
         n=0
 #         for find empty cell
         for i in range(0,self.N):
             for j in range(0,self.N):
                 if ((state[i][j])[0]=='e'):
-                    found.append((i,j))
+                    actions.extend(checkmoves((i,j),state,self.N))
+                    #found.append((i,j))
                     n+=1
                     pass
                 if(n==self.ecell):
-                    break
+                    return actions
                 pass
             if(n==self.ecell):
-                break
+                return actions
             pass
                     
-#             check moves
-#             append moves
-        n=0
-        for n in range (0,self.ecell): #isto pode ir para lá para cima
-            actions.extend(checkmoves(found[n],state,self.N))
-            pass       
+#             check moves#             append moves
+
+#         n=0
+#         for n in range (0,self.ecell): #isto pode ir para lá para cima
+#             actions.extend(checkmoves(found[n],state,self.N))
+#             pass       
 
 #         return lista moves
         return actions
@@ -147,33 +148,33 @@ def checkmoves(ecell,board,N):
     if (y-1)<0: # Invalid left
         moves.remove("left")
         
-    if (y+1)>=N: # Invalid right
+    elif (y+1)>=N: # Invalid right
         moves.remove("right")
 
     if (x+1)>=N: # Invalid down
         moves.remove("down")
         
-    if (x-1)<0: # Invalid up
+    elif (x-1)<0: # Invalid up
         moves.remove("up")
     
-    for n,move in enumerate(moves):
+    for move in (moves):
         if (move=="left"): 
-            if((board[x][y-1].split('-'))[-1]=='not' or (board[x][y-1])[0]=='g' or (board[x][y-1])[0]=='e' or (board[x][y-1])[0]=='i'): 
+            if((board[x][y-1])[-3]=='n' or (board[x][y-1])[0]=='g' or (board[x][y-1])[0]=='e' or (board[x][y-1])[0]=='i'): 
                 pass
             else:
                 actions.append(((x,y),(x,y-1)))
         elif (move=="right"): 
-            if((board[x][y+1].split('-'))[-1]=='not' or (board[x][y+1])[0]=='g' or (board[x][y+1])[0]=='e' or (board[x][y+1])[0]=='i'): 
+            if((board[x][y+1])[-3]=='n' or (board[x][y+1])[0]=='g' or (board[x][y+1])[0]=='e' or (board[x][y+1])[0]=='i'): 
                 pass
             else:
                 actions.append(((x,y),(x,y+1)))
         elif (move=="down"): 
-            if((board[x+1][y].split('-'))[-1]=='not' or (board[x+1][y])[0]=='g' or (board[x+1][y])[0]=='e' or (board[x+1][y])[0]=='i'): 
+            if((board[x+1][y])[-3]=='n' or (board[x+1][y])[0]=='g' or (board[x+1][y])[0]=='e' or (board[x+1][y])[0]=='i'): 
                 pass
             else:
                 actions.append(((x,y),(x+1,y)))
         elif (move=="up"): 
-            if((board[x-1][y].split('-'))[-1]=='not' or (board[x-1][y])[0]=='g' or (board[x-1][y])[0]=='e' or (board[x-1][y])[0]=='i'): 
+            if((board[x-1][y])[-3]=='n' or (board[x-1][y])[0]=='g' or (board[x-1][y])[0]=='e' or (board[x-1][y])[0]=='i'): 
                 pass
             else:
                 actions.append(((x,y),(x-1,y)))
@@ -185,39 +186,44 @@ def checkmoves(ecell,board,N):
 def movevalid(move,xi,yi,N):
     if(move=="left"):
         if (yi-1)<0: # Invalid
-            xf=xi
-            yf=yi
-            return (move,xf,yf,False)
+#             xf=xi
+#             yf=yi
+#             return (move,xf,yf,False)
+            return (move,xi,yi,False)
         else:
-            xf=xi
-            yf=yi-1
-            move="right"
+#             xf=xi
+#             yf=yi-1
+#             move="right"
+            return ("right",xi,yi-1,True)
     elif(move=="right"):
         if (yi+1)<N: # Valid
-            xf=xi
-            yf=yi+1
-            move="left"
+#             xf=xi
+#             yf=yi+1
+#             move="left"
+            return ("left",xi,yi+1,True)
         else:
-            xf=xi
-            yf=yi
-            return (move,xf,yf,False)
+#             xf=xi
+#             yf=yi
+            return (move,xi,yi,False)
     elif(move=="down"):
         if (xi+1)<N: # Valid
-            xf=xi+1
-            yf=yi
-            move="top"
+#             xf=xi+1
+#             yf=yi
+#             move="top"
+            return ("top",xi+1,yi,True)
         else:
-            xf=xi
-            yf=yi
-            return (move,xf,yf,False)
+#             xf=xi
+#             yf=yi
+            return (move,xi,yi,False)
     elif(move=="top"):
         if (xi-1)<0: # Invalid
-            xf=xi
-            yf=yi
-            return (move,xf,yf,False)
+#             xf=xi
+#             yf=yi
+            return (move,xi,yi,False)
         else:
-            xf=xi-1
-            yf=yi
-            move="down"
+#             xf=xi-1
+#             yf=yi
+#             move="down"
+            return ("down",xi-1,yi,True)
 
-    return (move,xf,yf,True)
+    return (move,xi,yi,False)
