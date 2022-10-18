@@ -1,5 +1,6 @@
 import search
-import numpy as np
+from os import listdir
+import time
 
 class RTBProblem (search.Problem):
     def __init__ (self):
@@ -142,7 +143,7 @@ class RTBProblem (search.Problem):
 def checkmoves(ecell,board,N):
     x=ecell[0]
     y=ecell[1]
-    moves=["left","right","down","up"]
+    moves=["up","left","down","right"]
     actions=[] 
      
     if (y-1)<0: # Invalid left
@@ -159,24 +160,24 @@ def checkmoves(ecell,board,N):
     
     for move in (moves):
         if (move=="left"): 
-            if((board[x][y-1])[-3]=='n' or (board[x][y-1])[0]=='g' or (board[x][y-1])[0]=='e' or (board[x][y-1])[0]=='i'): 
-                pass
-            else:
+            if((board[x][y-1])[-3]!='n' and (board[x][y-1])[0]!='g' and (board[x][y-1])[0]!='e' and (board[x][y-1])[0]!='i'): 
+#                pass
+#            else:
                 actions.append(((x,y),(x,y-1)))
         elif (move=="right"): 
-            if((board[x][y+1])[-3]=='n' or (board[x][y+1])[0]=='g' or (board[x][y+1])[0]=='e' or (board[x][y+1])[0]=='i'): 
-                pass
-            else:
+            if((board[x][y+1])[-3]!='n' and (board[x][y+1])[0]!='g' and (board[x][y+1])[0]!='e' and (board[x][y+1])[0]!='i'): 
+#                pass
+#            else:
                 actions.append(((x,y),(x,y+1)))
         elif (move=="down"): 
-            if((board[x+1][y])[-3]=='n' or (board[x+1][y])[0]=='g' or (board[x+1][y])[0]=='e' or (board[x+1][y])[0]=='i'): 
-                pass
-            else:
+            if((board[x+1][y])[-3]!='n' and (board[x+1][y])[0]!='g' and (board[x+1][y])[0]!='e' and (board[x+1][y])[0]!='i'): 
+#                pass
+#            else:
                 actions.append(((x,y),(x+1,y)))
         elif (move=="up"): 
-            if((board[x-1][y])[-3]=='n' or (board[x-1][y])[0]=='g' or (board[x-1][y])[0]=='e' or (board[x-1][y])[0]=='i'): 
-                pass
-            else:
+            if((board[x-1][y])[-3]!='n' and (board[x-1][y])[0]!='g' and (board[x-1][y])[0]!='e' and (board[x-1][y])[0]!='i'): 
+#                pass
+#            else:
                 actions.append(((x,y),(x-1,y)))
         pass
     
@@ -231,14 +232,25 @@ def movevalid(move,xi,yi,N):
 
 ## This function defines the main function
 def main():
-    problem=RTBProblem()
-    fh=open("Arquivo2/pub10.dat")
-    problem.load(fh)
-    problem.setAlgorithm()
-    result=problem.solve()
-    print(list(result.state))
-    print(problem.goal_test(result.state))
-
+#     problem=RTBProblem()
+#     fh=open("Arquivo2/pub10.dat")
+#     problem.load(fh)
+#     problem.setAlgorithm()
+#     result=problem.solve()
+#     print(list(result.state))
+#     print(problem.goal_test(result.state))
+    for files in listdir("Arquivo2"):
+        if files[-3:] == "dat":
+            #files
+            with open("Arquivo2/"+files,"r") as fh:
+                #print(files)
+                start_time = time.time()
+                teste = RTBProblem()
+                teste.setAlgorithm()
+                teste.load(fh)
+                teste.solve()
+                print(f"No ficheiro {files} demorou {time.time()-start_time}")
+    
 ## Executes the main function
 if __name__ == "__main__":
     main()
