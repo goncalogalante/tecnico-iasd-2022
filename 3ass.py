@@ -1,6 +1,6 @@
 import search
-# from os import listdir
-# import time
+from os import listdir
+import time
 
 
 class RTBProblem (search.Problem):
@@ -143,12 +143,12 @@ class RTBProblem (search.Problem):
         
         return h
     
-#     def setAlgorithm(self):
-#         self.algorithm=search.astar_search  #astar_search  breadth_first_graph_search iterative_deepening_search
-#         pass
-#     
-#     def solve(self):
-#         return self.algorithm(self)
+    def setAlgorithm(self):
+        self.algorithm=search.astar_search  #astar_search  breadth_first_graph_search iterative_deepening_search
+        pass
+    
+    def solve(self):
+        return self.algorithm(self)
     
 def goal_test1(self,state): 
         xi=self.beg[0]
@@ -317,3 +317,46 @@ def movevalid(move,xi,yi,N):
             return ("down",xi-1,yi,True)
 
     return (move,xi,yi,False)
+
+
+## This function defines the main function
+def main():
+#     problem=RTBProblem()
+#     fh=open("Arquivo2/pub10.dat")
+#     problem.load(fh)
+#     problem.setAlgorithm()
+#     result=problem.solve()
+#     print(list(result.state))
+#     print(problem.goal_test(result.state))
+    for files in listdir("Arquivo2"):
+        if files[-3:] == "dat":
+            #files
+            with open("Arquivo2/"+files,"r") as fh:
+                #print(files)
+                start_time = time.time()
+                teste = RTBProblem()
+                teste.setAlgorithm()
+                teste.load(fh)
+                a=teste.solve()
+                if(a!=None):
+                    print(f"No ficheiro {files} demorou {time.time()-start_time} | {a.state}\n\n")
+                    pass
+# problem1 = Coun tCall s ( s o l u t i o n . RTBProblem ( ) )
+# t10 = time . p r o c e s s tim e ( )
+# with open(input ) a s f h :
+# problem1 . loa d ( f h )
+# r e s u l t 1 = u nif o rm c o s t s e a r c h g r a p h ( problem1 )
+# t11 = time . p r o c e s s tim e ( )
+# problem2 = Coun tCall s ( s o l u t i o n . RTBProblem ( ) )
+# t20 = time . p r o c e s s tim e ( )
+# with open(input ) a s f h :
+# problem2 . loa d ( f h )
+# r e s u l t 2 = a s t a r s e a r c h g r a p h ( problem2 )
+# t21 = time . p r o c e s s tim e ( )
+    
+    
+    
+## Executes the main function
+if __name__ == "__main__":
+    main()
+
