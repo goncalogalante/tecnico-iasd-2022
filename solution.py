@@ -10,7 +10,7 @@ class RTBProblem (search.Problem):
         self.beg=(-1,-1)
         self.end=(-1,-1)
         self.ecell=0
-        self.np=0
+        self.hi=0
         self.algorithm=None
         pass
 
@@ -104,7 +104,8 @@ class RTBProblem (search.Problem):
             a=fh.readline()
             pass
         self.N=int(a[0:-1])
-     
+
+        self.hi=(self.N)**2
         ## For each line of text saves it to the map matrix and makes some verifications 
         for i in range (0,self.N):
             l=fh.readline()
@@ -125,23 +126,27 @@ class RTBProblem (search.Problem):
                     pass
                 elif(((self.initial)[i][j])[0]=='e'):
                     self.ecell+=1
+                    self.hi-=1
                     pass
                 elif(((self.initial)[i][j])[0]=='n'):
-                    self.np+=1
+                    self.hi-=1
                     pass
                 pass
             self.initial[i]=tuple(self.initial[i])
             pass
         self.initial=tuple(self.initial)
+#        self.hi-=(abs(self.beg[0]-self.end[0])+(abs(self.beg[1]-self.end[1]))-2)
+        
         #print(type(self.initial),self.initial)
         pass
     
     def h(self,node):
-        hi=self.N*self.N-2-self.ecell-self.np
         
-        h=hi-goal_test1(self,node.state)
-        
-        return h
+        h=goal_test1(self,node.state)    
+#        if(h==0):
+#            return 0
+#        else:
+        return self.hi*node.depth/(2*h+1)
     
 #     def setAlgorithm(self):
 #         self.algorithm=search.astar_search  #astar_search  breadth_first_graph_search iterative_deepening_search
@@ -151,83 +156,84 @@ class RTBProblem (search.Problem):
 #         return self.algorithm(self)
     
 def goal_test1(self,state): 
-        xi=self.beg[0]
-        yi=self.beg[1]
-        steps=0
-        answer=True
-        ## Defines the next move from the initial state coordinates
-        nextm=(state[xi][yi].split('-'))[1]
-        #print(xi,yi,state[xi][yi])
+    xi=self.beg[0]
+    yi=self.beg[1]
+    steps=0
+    answer=True
+    ## Defines the next move from the initial state coordinates
+    nextm=(state[xi][yi].split('-'))[1]
+    #print(xi,yi,state[xi][yi])
+    
+    ## Loop that evaluates the cells from the initial state to the goal state
+    ## and feedbacks it according to its coordinates
+    while (xi,yi)!=(self.end):
         
-        ## Loop that evaluates the cells from the initial state to the goal state
-        ## and feedbacks it according to its coordinates
-        while (xi,yi)!=(self.end):
-            
-            ## Checks if the move is valid
-            (nextm,xi,yi,answer) = movevalid(nextm,xi,yi,self.N)
-            if(answer==True): 
-                ## Evaluates if the cell is the goal state
-                if(xi,yi)==self.end:
-                    if((state[xi][yi].split('-'))[1] == nextm):
-                        return 10000 #goal
-                    else:
-                        break
-                
-                ## Evaluates if the next cell is valid    
-                if((state[xi][yi].split('-'))[0] == nextm):
-                    nextm=(state[xi][yi].split('-'))[1]
-                    pass
-                elif((state[xi][yi].split('-'))[1] == nextm):
-                    nextm=(state[xi][yi].split('-'))[0]
-                    pass
-                
-                ## Returns False if it is none of the above
+        ## Checks if the move is valid
+        (nextm,xi,yi,answer) = movevalid(nextm,xi,yi,self.N)
+        if(answer==True): 
+            ## Evaluates if the cell is the goal state
+            if(xi,yi)==self.end:
+                if((state[xi][yi].split('-'))[1] == nextm):
+                    return steps #goal 0
                 else:
-                    #print("bad move",xi,yi,state[xi][yi])
                     break
-                pass
-            else:
-                break
-            steps+=1
-            pass
-        
-        xi=self.end[0]
-        yi=self.end[1]
-        answer=True
-        
-        while (xi,yi)!=(self.beg):
             
-            ## Checks if the move is valid
-            (nextm,xi,yi,answer) = movevalid(nextm,xi,yi,self.N)
-            if(answer==True): 
-                ## Evaluates if the cell is the goal state
-                if(xi,yi)==self.beg:
-                    if((state[xi][yi].split('-'))[1] == nextm):
-                        return 10000 #goal
-                    else:
-                        break
-                
-                ## Evaluates if the next cell is valid    
-                if((state[xi][yi].split('-'))[0] == nextm):
-                    nextm=(state[xi][yi].split('-'))[1]
-                    pass
-                elif((state[xi][yi].split('-'))[1] == nextm):
-                    nextm=(state[xi][yi].split('-'))[0]
-                    pass
-                
-                ## Returns False if it is none of the above
-                else:
-                    #print("bad move",xi,yi,state[xi][yi])
-                    break
+            ## Evaluates if the next cell is valid    
+            if((state[xi][yi].split('-'))[0] == nextm):
+                nextm=(state[xi][yi].split('-'))[1]
                 pass
+            elif((state[xi][yi].split('-'))[1] == nextm):
+                nextm=(state[xi][yi].split('-'))[0]
+                pass
+            
+            ## Returns False if it is none of the above
             else:
+                #print("bad move",xi,yi,state[xi][yi])
                 break
-            steps+=1
             pass
+        else:
+            break
+        steps+=1
+        pass
+    
+    xi=self.end[0]
+    yi=self.end[1]
+    answer=True
+    nextm=(state[xi][yi].split('-'))[1]
+
+    while (xi,yi)!=(self.beg):
         
-        
-        ## Returns True if the puzzle is already a solution
-        return steps
+        ## Checks if the move is valid
+        (nextm,xi,yi,answer) = movevalid(nextm,xi,yi,self.N)
+        if(answer==True): 
+            ## Evaluates if the cell is the goal state
+            if(xi,yi)==self.beg:
+                if((state[xi][yi].split('-'))[1] == nextm):
+                    return steps #goal 0
+                else:
+                    break
+            
+            ## Evaluates if the next cell is valid    
+            if((state[xi][yi].split('-'))[0] == nextm):
+                nextm=(state[xi][yi].split('-'))[1]
+                pass
+            elif((state[xi][yi].split('-'))[1] == nextm):
+                nextm=(state[xi][yi].split('-'))[0]
+                pass
+            
+            ## Returns False if it is none of the above
+            else:
+                #print("bad move",xi,yi,state[xi][yi])
+                break
+            pass
+        else:
+            break
+        steps+=1
+        pass
+    
+    
+    ## Returns True if the puzzle is already a solution
+    return steps
     
 def checkmoves(ecell,board,N):
     x=ecell[0]

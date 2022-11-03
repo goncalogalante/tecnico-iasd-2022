@@ -10,7 +10,7 @@ class RTBProblem (search.Problem):
         self.beg=(-1,-1)
         self.end=(-1,-1)
         self.ecell=0
-        self.np=0
+        self.hi=0
         self.algorithm=None
         pass
 
@@ -104,7 +104,8 @@ class RTBProblem (search.Problem):
             a=fh.readline()
             pass
         self.N=int(a[0:-1])
-     
+
+        self.hi=(self.N)**2
         ## For each line of text saves it to the map matrix and makes some verifications 
         for i in range (0,self.N):
             l=fh.readline()
@@ -125,26 +126,27 @@ class RTBProblem (search.Problem):
                     pass
                 elif(((self.initial)[i][j])[0]=='e'):
                     self.ecell+=1
+                    self.hi-=1
                     pass
                 elif(((self.initial)[i][j])[0]=='n'):
-                    self.np+=1
+                    self.hi-=1
                     pass
                 pass
             self.initial[i]=tuple(self.initial[i])
             pass
         self.initial=tuple(self.initial)
+#        self.hi-=(abs(self.beg[0]-self.end[0])+(abs(self.beg[1]-self.end[1]))-2)
+        
         #print(type(self.initial),self.initial)
         pass
     
     def h(self,node):
-        hi=self.N*self.N-2-self.ecell-self.np
         
-        h=hi-goal_test1(self,node.state)
-        if(h<0):
-            h=0
-            pass        
-        
-        return h
+        h=goal_test1(self,node.state)    
+#        if(h==0):
+#            return 0
+#        else:
+        return self.hi*node.depth/(2*h+1)
     
     def setAlgorithm(self):
         self.algorithm=search.astar_search  #astar_search  breadth_first_graph_search iterative_deepening_search
@@ -172,7 +174,7 @@ def goal_test1(self,state):
             ## Evaluates if the cell is the goal state
             if(xi,yi)==self.end:
                 if((state[xi][yi].split('-'))[1] == nextm):
-                    return 1000000 #goal
+                    return steps #goal 0
                 else:
                     break
             
@@ -207,7 +209,7 @@ def goal_test1(self,state):
             ## Evaluates if the cell is the goal state
             if(xi,yi)==self.beg:
                 if((state[xi][yi].split('-'))[1] == nextm):
-                    return 10000 #goal
+                    return steps #goal 0
                 else:
                     break
             
@@ -332,11 +334,11 @@ def main():
 #     result=problem.solve()
 #     print(list(result.state))
 #     print(problem.goal_test(result.state))
-    for files in listdir("Arquivo2"):
+    for files in listdir("Arquivo3"):
         if files[-3:] == "dat":
-#         if files == "pub10.dat":
+#         if files == "pub02.dat":
             #files
-            with open("Arquivo2/"+files,"r") as fh:
+            with open("Arquivo3/"+files,"r") as fh:
                 #print(files)
                 start_time = time.time()
                 teste = RTBProblem()
@@ -344,7 +346,8 @@ def main():
                 teste.load(fh)
                 a=teste.solve()
                 if(a!=None):
-                    print(f"No ficheiro {files} demorou {time.time()-start_time} | {a.state}\n\n")
+                    print(f"No ficheiro {files} demorou {time.time()-start_time} | path cost {a.depth} | hi = {teste.hi} \n") #{a.state}
+#                     print(f"No ficheiro {files} demorou {time.time()-start_time}\n")
                     pass
 # problem1 = Coun tCall s ( s o l u t i o n . RTBProblem ( ) )
 # t10 = time . p r o c e s s tim e ( )
