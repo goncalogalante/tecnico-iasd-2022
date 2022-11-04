@@ -24,13 +24,11 @@ class RTBProblem (search.Problem):
         state[action[0][0]]=tuple(state[action[0][0]])
         state[action[1][0]]=tuple(state[action[1][0]])
         state=tuple(state)
-        #print(action)
         return state
     
     def actions(self,state):
         actions=[]
         n=0
-#         for find empty cell
         for i in range(0,self.N):
             for j in range(0,self.N):
                 if ((state[i][j])[0]=='e'):
@@ -43,15 +41,6 @@ class RTBProblem (search.Problem):
             if(n==self.ecell):
                 return actions
             pass
-                    
-#             check moves
-#             append moves
-#        n=0
-#        for n in range (0,self.ecell): #isto pode ir para lá para cima
-#            actions.extend(checkmoves(found[n],state,self.N))
-#            pass       
-
-#         return lista moves
         return actions
 
     def goal_test(self,state): 
@@ -61,7 +50,6 @@ class RTBProblem (search.Problem):
         
         ## Defines the next move from the initial state coordinates
         nextm=(state[xi][yi].split('-'))[1]
-        #print(xi,yi,state[xi][yi])
         
         ## Loop that evaluates the cells from the initial state to the goal state
         ## and feedbacks it according to its coordinates
@@ -87,7 +75,6 @@ class RTBProblem (search.Problem):
                 
                 ## Returns False if it is none of the above
                 else:
-                    #print("bad move",xi,yi,state[xi][yi])
                     return False
                 pass
             else:
@@ -105,6 +92,7 @@ class RTBProblem (search.Problem):
             pass
         self.N=int(a[0:-1])
 
+        ## Calculates and stores the number of places in the puzzle to afterwards calculate the heuristic
         self.hi=(self.N)**2
         ## For each line of text saves it to the map matrix and makes some verifications 
         for i in range (0,self.N):
@@ -119,33 +107,31 @@ class RTBProblem (search.Problem):
 
             for j in range(0,self.N):
                 if(((self.initial)[i][j])[0]=='i'):
+                    ## Saves the coordinates of the initial block
                     self.beg=(i,j)
                     pass
                 elif(((self.initial)[i][j])[0]=='g'):
+                    ## Saves the coordinates of the end block
                     self.end=(i,j)
                     pass
                 elif(((self.initial)[i][j])[0]=='e'):
                     self.ecell+=1
-                    self.hi-=1
+                    self.hi-=1      ## Subtracts the found empty cell to the number of blocks in the puzzle
                     pass
                 elif(((self.initial)[i][j])[0]=='n'):
-                    self.hi-=1
+                    self.hi-=1      ## Subtracts the no passage cell to the number of blocks in the puzzle
                     pass
                 pass
             self.initial[i]=tuple(self.initial[i])
             pass
         self.initial=tuple(self.initial)
-#        self.hi-=(abs(self.beg[0]-self.end[0])+(abs(self.beg[1]-self.end[1]))-2)
         
-        #print(type(self.initial),self.initial)
         pass
     
     def h(self,node):
         
-        h=goal_test1(self,node.state)    
-#        if(h==0):
-#            return 0
-#        else:
+        h=countconnect(self,node.state)    
+
         return self.hi*node.depth/(2*h+1)
     
     def setAlgorithm(self):
@@ -155,14 +141,13 @@ class RTBProblem (search.Problem):
     def solve(self):
         return self.algorithm(self)
     
-def goal_test1(self,state): 
+def countconnect(self,state): 
     xi=self.beg[0]
     yi=self.beg[1]
     steps=0
     answer=True
     ## Defines the next move from the initial state coordinates
     nextm=(state[xi][yi].split('-'))[1]
-    #print(xi,yi,state[xi][yi])
     
     ## Loop that evaluates the cells from the initial state to the goal state
     ## and feedbacks it according to its coordinates
@@ -178,24 +163,25 @@ def goal_test1(self,state):
                 else:
                     break
             
-            ## Evaluates if the next cell is valid    
+            ## Evaluates if the next cell is valid
+            ## If valid, advances to the next cell, if not, stops
             if((state[xi][yi].split('-'))[0] == nextm):
                 nextm=(state[xi][yi].split('-'))[1]
                 pass
             elif((state[xi][yi].split('-'))[1] == nextm):
                 nextm=(state[xi][yi].split('-'))[0]
-                pass
-            
-            ## Returns False if it is none of the above
+                pass            
             else:
-                #print("bad move",xi,yi,state[xi][yi])
                 break
             pass
         else:
             break
+        ## Detected a valid move, adds one more connected block
         steps+=1
         pass
     
+    ## The initial and goal blocks aren't connected and there was no more connected blocks since the beginning
+    ## Repeats the search starting from the end cell
     xi=self.end[0]
     yi=self.end[1]
     answer=True
@@ -205,14 +191,7 @@ def goal_test1(self,state):
         
         ## Checks if the move is valid
         (nextm,xi,yi,answer) = movevalid(nextm,xi,yi,self.N)
-        if(answer==True): 
-            ## Evaluates if the cell is the goal state
-            if(xi,yi)==self.beg:
-                if((state[xi][yi].split('-'))[1] == nextm):
-                    return steps #goal 0
-                else:
-                    break
-            
+        if(answer==True):             
             ## Evaluates if the next cell is valid    
             if((state[xi][yi].split('-'))[0] == nextm):
                 nextm=(state[xi][yi].split('-'))[1]
@@ -220,19 +199,17 @@ def goal_test1(self,state):
             elif((state[xi][yi].split('-'))[1] == nextm):
                 nextm=(state[xi][yi].split('-'))[0]
                 pass
-            
-            ## Returns False if it is none of the above
             else:
-                #print("bad move",xi,yi,state[xi][yi])
                 break
             pass
         else:
             break
+        ## Detected a valid move, adds one more connected block
         steps+=1
         pass
     
-    
-    ## Returns True if the puzzle is already a solution
+    ## After counting running the search starting from both the initial and goal blocks
+    ## Returns the number of already connected blocks
     return steps
     
 def checkmoves(ecell,board,N):
@@ -254,25 +231,18 @@ def checkmoves(ecell,board,N):
         moves.remove("up")
     
     for move in (moves):
+        ## For each move, checks if the cell is able to move, adding the action in case it is
         if (move=="left"): 
             if((board[x][y-1])[-3]!='n' and (board[x][y-1])[0]!='g' and (board[x][y-1])[0]!='e' and (board[x][y-1])[0]!='i'): 
-#                pass
-#            else:
                 actions.append(((x,y),(x,y-1)))
         elif (move=="right"): 
             if((board[x][y+1])[-3]!='n' and (board[x][y+1])[0]!='g' and (board[x][y+1])[0]!='e' and (board[x][y+1])[0]!='i'): 
-#                pass
-#            else:
                 actions.append(((x,y),(x,y+1)))
         elif (move=="down"): 
             if((board[x+1][y])[-3]!='n' and (board[x+1][y])[0]!='g' and (board[x+1][y])[0]!='e' and (board[x+1][y])[0]!='i'): 
-#                pass
-#            else:
                 actions.append(((x,y),(x+1,y)))
         elif (move=="up"): 
             if((board[x-1][y])[-3]!='n' and (board[x-1][y])[0]!='g' and (board[x-1][y])[0]!='e' and (board[x-1][y])[0]!='i'): 
-#                pass
-#            else:
                 actions.append(((x,y),(x-1,y)))
         pass
     
@@ -282,44 +252,23 @@ def checkmoves(ecell,board,N):
 def movevalid(move,xi,yi,N):
     if(move=="left"):
         if (yi-1)<0: # Invalid
-#             xf=xi
-#             yf=yi
-#             return (move,xf,yf,False)
             return (move,xi,yi,False)
         else:
-#             xf=xi
-#             yf=yi-1
-#             move="right"
             return ("right",xi,yi-1,True)
     elif(move=="right"):
         if (yi+1)<N: # Valid
-#             xf=xi
-#             yf=yi+1
-#             move="left"
             return ("left",xi,yi+1,True)
         else:
-#             xf=xi
-#             yf=yi
             return (move,xi,yi,False)
     elif(move=="down"):
         if (xi+1)<N: # Valid
-#             xf=xi+1
-#             yf=yi
-#             move="top"
             return ("top",xi+1,yi,True)
         else:
-#             xf=xi
-#             yf=yi
             return (move,xi,yi,False)
     elif(move=="top"):
         if (xi-1)<0: # Invalid
-#             xf=xi
-#             yf=yi
             return (move,xi,yi,False)
         else:
-#             xf=xi-1
-#             yf=yi
-#             move="down"
             return ("down",xi-1,yi,True)
 
     return (move,xi,yi,False)
@@ -334,11 +283,11 @@ def main():
 #     result=problem.solve()
 #     print(list(result.state))
 #     print(problem.goal_test(result.state))
-    for files in listdir("Arquivo3"):
+    for files in listdir("tests_ass3"):
         if files[-3:] == "dat":
 #         if files == "pub02.dat":
             #files
-            with open("Arquivo3/"+files,"r") as fh:
+            with open("tests_ass3/"+files,"r") as fh:
                 #print(files)
                 start_time = time.time()
                 teste = RTBProblem()
