@@ -141,9 +141,9 @@ class RTBProblem (search.Problem):
         
         It is not consistent because the heuristic difference cost overestimates the actual step cost when going from any
         neighboring node to the goal, plus the cost of reaching that neighbour. Since the admissibility is not guaranteed,
-        an overestimation of the of the true cost can lead to inconsistency. An example of a state with multiple cells
-        connected but with 2 breaks near the goal and initial cell proves inconsistency, because the connecting those breaks
-        will lead to a big drop int the heuristic function, meaning that the h(n)> path_cost(=1) + h(n'), being n the parent
+        an overestimation of the true cost can lead to inconsistency. An example of a state with multiple cells
+        connected but with 2 breaks near the goal and initial cell proves inconsistency, because connecting those breaks
+        will lead to a big drop in the heuristic function, meaning that the h(n)> path_cost(=1) + h(n'), being n the parent
         node and n' the child node.
         
         Although the heuristic function doesn't have this essencial characteristics, we can often obtain optimal solutions.
