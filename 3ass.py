@@ -129,7 +129,18 @@ class RTBProblem (search.Problem):
         pass
     
     def h(self,node):
+        """This heurisitic works like this:
+        Takes into account:
+        1) the number of places in the puzzle excluding the "empty-cells" and "no-passage" cells. (#Places)
+        2) the length of the path from the root node of the tree to that node. (Depth)
+        3) the number of connections between the initial state and the goal state. (#Connections)
         
+        So, the heuristic function, h(n) is defined by doing: h(n) = (Depth * #Places)/(2*#Connections + 1)
+        
+        It is not consistent because the heuristic difference cost overestimates the actual step cost when going from any neighboring node to the goal, plus the cost of 
+        reaching that neighbour.
+        It is not admissable because it estimates a cost that is higher than the true cheapest cost to reach the goal state.
+        """
         h=countconnect(self,node.state)    
 
         return self.hi*node.depth/(2*h+1)
